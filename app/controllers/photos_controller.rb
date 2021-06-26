@@ -1,5 +1,6 @@
 class PhotosController < ApplicationController
   before_action :set_photo, only: %i[ show edit update destroy ]
+  before_action :baria_user, only: %i[ edit update destroy ]
 
   # GET /photos or /photos.json
   def index
@@ -8,6 +9,7 @@ class PhotosController < ApplicationController
 
   # GET /photos/1 or /photos/1.json
   def show
+    @favorite = current_user.favorites.find_by(photo_id: @photo.id)
   end
 
   # GET /photos/new
@@ -16,21 +18,26 @@ class PhotosController < ApplicationController
   end
 
   def confirm
-    @photo = Photo.new(photo_params)
+    # @photo = Photo.new(photo_params)
+    # binding.pry
+    @photo = current_user.photos.build(photo_params)
+    render :new if @photo.invalid?
   end
 
   # GET /photos/1/edit
   def edit
+
   end
 
   # POST /photos or /photos.json
   def create
-    @photo = Photo.new(photo_params)
+    @photo = current_user.photos.build(photo_params)
 
     respond_to do |format|
       if @photo.save
         format.html { redirect_to @photo, notice: "Photo was successfully created." }
         format.json { render :show, status: :created, location: @photo }
+        ConfirmMailer.confirm_mail(@photo).deliver
       else
         format.html { render :new, status: :unprocessable_entity }
         format.json { render json: @photo.errors, status: :unprocessable_entity }
@@ -66,8 +73,14 @@ class PhotosController < ApplicationController
       @photo = Photo.find(params[:id])
     end
 
+    def baria_user
+      unless Photo.find(params[:id]).user_id.to_i == current_user.id
+        redirect_to photos_path(current_user)
+      end
+    end
+
     # Only allow a list of trusted parameters through.
     def photo_params
-      params.require(:photo).permit(:image, :content, :image_cache)
+      params.require(:photo).permit(:image, :content, :image_cache, :user_id)
     end
 end
