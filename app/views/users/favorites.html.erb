@@ -1,0 +1,22 @@
+<h1>Favorites list</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Image</th>
+      <th>Content</th>
+      <th>Name</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @favorite.each do |photo| %>
+      <tr>
+        <td><%= image_tag photo.image.url if photo.image.present? %></td>
+        <td><%= photo.content %></td>
+        <td><%= photo.user.name %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

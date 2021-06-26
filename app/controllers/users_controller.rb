@@ -32,6 +32,10 @@ class UsersController < ApplicationController
     @user = User.find(params[:id])
   end
 
+  def favorites
+    @favorite = current_user.favorite_photos
+  end
+
   private
   def baria_user
     unless User.find(params[:id]).id.to_i == current_user.id

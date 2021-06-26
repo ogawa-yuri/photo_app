@@ -1,12 +1,11 @@
 Rails.application.routes.draw do
+  resource :favorites, only: [:create, :destroy]
   resources :sessions, only: [:new, :create, :destroy]
   resources :users do
-  get :favorites, on: :collection
+    get :favorites, on: :collection
   end
 
-
   resources :photos do
-    resource :favorites, only: [:create, :destroy]
     collection do
       post :confirm
     end
