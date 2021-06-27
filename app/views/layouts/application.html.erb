@@ -12,16 +12,20 @@
   <% flash.each do |key, value| %>
     <%= content_tag(:div, value, class: "#{key}") %>
   <% end %>
-  <% if logged_in? %>
-    <%= link_to "Profile", user_path(current_user.id) %>
-    <%= link_to "New Photo", new_photo_path  %>
-    <%= link_to "Index", photos_path  %>
-    <%= link_to "Favorites list", favorites_users_path  %>
-    <%= link_to "Logout", session_path(current_user.id), method: :delete %>
-  <% else %>
-    <%= link_to "Sign up", new_user_path %>
-    <%= link_to "Login", new_session_path %>
-  <% end %>
+  <nav class="header-nav">
+    <ul class="header-nav-list">
+    <% if logged_in? %>
+      <li class="header-nav-item"><%= link_to "Profile", user_path(current_user.id) %></li>
+      <li class="header-nav-item"><%= link_to "New Photo", new_photo_path  %></li>
+      <li class="header-nav-item"><%= link_to "Index", photos_path  %></li>
+      <li class="header-nav-item"><%= link_to "Favorites list", favorites_users_path  %></li>
+      <li class="header-nav-item"><%= link_to "Logout", session_path(current_user.id), method: :delete %></li>
+    <% else %>
+      <li class="header-nav-item"><%= link_to "Sign up", new_user_path %></li>
+      <li class="header-nav-item"><%= link_to "Login", new_session_path %></li>
+    <% end %>
+    </ul>
+  </nav>
   <%= yield %>
 </body>
 </html>
